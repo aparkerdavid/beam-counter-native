@@ -1,10 +1,21 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
+import { Socket } from "phoenix";
+import { useLiveState } from "./live-state";
+
+let socket = new Socket("wss://beam-counter.fly.dev/socket", {
+  params: { userToken: "1234" },
+});
+socket.connect();
 
 export default function App() {
+  const [pushEvent, state] = useLiveState(socket, "counter", { count: 0 });
   return (
     <View style={styles.container}>
-      <Button title="0" />
+      <Button
+        title={`${state.count}`}
+        onPress={() => pushEvent("increment", {})}
+      />
       <StatusBar style="auto" />
     </View>
   );
