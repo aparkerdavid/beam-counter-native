@@ -8,7 +8,7 @@ export function useLiveState(socket, topic, initialState) {
     stateProxy = proxy(initialState);
   }
   if (!channel) {
-    channel = socket.channel(topic, { token: "123" });
+    channel = socket.channel(topic, {});
     channel.join();
     channel.on("state:change", (payload) => {
       Object.assign(stateProxy, payload.state);
